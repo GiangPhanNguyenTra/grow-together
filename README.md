@@ -20,7 +20,7 @@ Simple Spring Boot demo project illustrating API Rate Limiting using Bucket4j wi
 
 ## Testing Rate Limiting
 
-Use `curl` or Postman/Insomnia.
+Use `curl` or Postman.
 
 1.  **Endpoint:** `GET http://localhost:8080/api/greeting`
 2.  **Header:** Requires `X-api-key` (e.g., `FREE-USER-123`, `BSC-USER-456`, `PRO-USER-789`).
