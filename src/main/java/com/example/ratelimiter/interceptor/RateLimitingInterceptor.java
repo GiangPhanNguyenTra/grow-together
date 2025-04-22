@@ -33,20 +33,20 @@ public class RateLimitingInterceptor implements HandlerInterceptor{
             return false;
         }
 
-        // Lấy bucket từ service quản lý cache in-memory
+        // Get the bucket from In-memory cache management service
         Bucket bucket = rateLimiterService.resolveBucket(apiKey);
         
-        // Thử tiêu thụ 1 token từ bucket
+        // Try consume 1 token from the bucket
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
 
         if (probe.isConsumed()) {
-            // còn token
+            // tokens are still available
             response.setHeader("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
             log.debug("Request allowed for API Key: {}. Remaining tokens: {}", apiKey, probe.getRemainingTokens());
 
-            return true; // cho phép request đi tiếp
+            return true; // allow the request to proceed
         } else {
-            // hết token
+            // no token left
             long waitForRefillNonos = probe.getNanosToWaitForRefill();
             long retryAfterSeconds = TimeUnit.NANOSECONDS.toSeconds(waitForRefillNonos);
 
@@ -57,7 +57,7 @@ public class RateLimitingInterceptor implements HandlerInterceptor{
 
             response.sendError(HttpStatus.TOO_MANY_REQUESTS.value(), "You have exhausted your API request quota. Try again Later.");
                 
-            return false; // chặn request
+            return false; // block/deny the request
         }
     }
 

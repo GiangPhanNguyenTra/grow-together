@@ -24,7 +24,7 @@ public class PricingPlanService {
     }
 
 
-    // Giả sử lấy Plan dựa trên API KEY
+    // (Assume) Determining the Plan based on the API KEY
     public Plan resolvePlanForApiKey(String apiKey) {
         if (apiKey == null || apiKey.isEmpty())
             return Plan.FREE;
